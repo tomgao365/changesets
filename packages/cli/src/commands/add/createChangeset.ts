@@ -233,41 +233,9 @@ export default async function createChangeset(
     releases.push({ name: pkg.packageJson.name, type });
   }
 
-  log(
-    "Please enter a summary for this change (this will be in the changelogs)."
-  );
-  log(chalk.gray("  (submit empty line to open external editor)"));
-
-  let summary = await cli.askQuestion("Summary");
-  if (summary.length === 0) {
-    try {
-      summary = cli.askQuestionWithEditor(
-        "\n\n# Please enter a summary for your changes.\n# An empty message aborts the editor."
-      );
-      if (summary.length > 0) {
-        return {
-          confirmed: true,
-          summary,
-          releases,
-        };
-      }
-    } catch (err) {
-      log(
-        "An error happened using external editor. Please type your summary here:"
-      );
-    }
-
-    summary = await cli.askQuestion("");
-    while (summary.length === 0) {
-      summary = await cli.askQuestion(
-        "\n\n# A summary is required for the changelog! 😪"
-      );
-    }
-  }
-
   return {
     confirmed: false,
-    summary,
+    summary: "",
     releases,
   };
 }

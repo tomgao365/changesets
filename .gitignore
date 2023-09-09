@@ -4,3 +4,9 @@ scratchings.js
 dist/
 .env
 coverage/
+
+# patch
+.history
+**/src/index.d.ts
+packages/cli/src/changelog.d.ts
+packages/cli/src/commit/index.d.ts
