@@ -51,17 +51,21 @@ async function writeChangeset(
     // 检查 tag
     const tags = await git.tags();
     const tag = `${pkg.name}@${pkg.version}`;
+
+    let params = [
+      "--full-history",
+      "--date-order",
+      "--decorate=full",
+      "--",
+      `packages/${name}`,
+    ];
+
     if (tags.all.includes(tag)) {
-      const logs = await git.log([
-        `${pkg.name}@${pkg.version}..HEAD`,
-        "--full-history",
-        "--date-order",
-        "--decorate=full",
-        "--",
-        `packages/${name}`,
-      ]);
-      summary = logs.all.map((s) => `- ${s.message}`).join("\n");
+      params = [`${tag}..HEAD`].concat(params);
     }
+
+    const logs = await git.log(params);
+    summary = logs.all.map((s) => `- ${s.message}`).join("\n");
 
     const newChangesetPath = path.resolve(
       changesetBase,
